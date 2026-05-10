@@ -39,4 +39,8 @@ Steps:
    - Body summarising what was implemented, the key technical decisions made, and how the acceptance criteria are satisfied.
    - Paste the full `list` reporter output from `npm test` (pass/fail counts and test names).
    - Embed one screenshot per key acceptance criterion from `e2e/test-results/` using `![description](relative/path)`.
-9. Stop. Do not begin the next use case.
+10. Update `docs/REQUIREMENTS.md` Use-Case Tracker:
+    - Change the UC row status to `✅ Complete — [PR #N](url)` using the URL returned by `gh pr create`.
+    - Commit the update directly to the PR branch: `git add docs/REQUIREMENTS.md && git commit -m "docs: mark UC-XX complete with PR #N link"`.
+    - Push the commit so it is included in the PR.
+11. Stop. Do not begin the next use case.
