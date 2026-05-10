@@ -12,7 +12,15 @@ Steps:
    - Backend concerns: transaction boundaries, error codes, idempotency
    - Any constraints or non-goals the creator wants to enforce
    Ask all questions in one batch and wait for answers before proceeding.
-5. If the use case requires backend API endpoints:
+5. **Create an implementation plan** — based on the use case doc, architecture context, and the creator's answers, write a plan to `docs/implementation-plan/$ARGUMENTS-implementation-plan.md`. Use `docs/templates/implementation-plan-template.md` as the template:
+   - Status + link to use case
+   - Overview (what the UC delivers and how the work splits)
+   - Files Changed (tables per area: frontend, backend, E2E)
+   - Key Design Decisions (non-obvious choices with rationale)
+   - Business Rules Enforced (rule → where enforced table)
+   - E2E Test Coverage (test case → scenario table)
+   **Show the plan to the creator and wait for explicit approval before proceeding.**
+6. If the use case requires backend API endpoints:
    a. Add the new endpoints to the single service spec at `docs/architecture/contracts/api/data-pumpster-server.yaml` (OpenAPI 3.1). Create the file if it does not yet exist.
       - Define all paths, HTTP methods, request bodies, query params, and response schemas for this UC.
       - Include error responses (4xx/5xx) with problem-detail shapes.
@@ -23,31 +31,30 @@ Steps:
       - Use JUnit 5 + Mockito (or MockK) to test each class in isolation; mock all collaborators.
       - Test the happy path and all documented error/edge cases from the spec.
    c. Implement the frontend against the same spec (treat it as the source of truth).
-6. Implement only what is required by this use case — no more, no less — respecting the creator's answers from step 4.
+7. Implement only what is required by this use case — no more, no less — respecting the creator's answers from step 4.
    - **UI implementation must follow the prototype at `prototype/Data-Pumpster-Standalone.html`** — match layout, component structure, copy, and interaction patterns as closely as possible. Only deviate where the use case doc or creator's answers explicitly override the prototype.
-7. Write E2E tests in `e2e/tests/$ARGUMENTS.spec.ts` covering the golden path and key edge cases:
+8. Write E2E tests in `e2e/tests/$ARGUMENTS.spec.ts` covering the golden path and key edge cases:
    - Follow the conventions in `e2e/tests/base.ts` and existing specs for structure and imports.
    - Add page-object helpers in `e2e/pages/` if the UC introduces new UI surfaces.
    - Place any required test fixture files (CSV, etc.) in `e2e/fixtures/`.
    - Each acceptance criterion must map to at least one test case.
-   - Before running tests, start backing services: `docker compose up -d` from `data-pumpster-server/`.
-   - Run the **full** suite from the `e2e/` directory: `npm test` (no file filter — all specs, not just the new one).
-     `npm test` uses `--reporter=html,list`: it prints a list summary to stdout and generates the HTML report in `e2e/playwright-report/`.
+   - Run `make e2e` from the repo root. This single target:
+       1. Starts everything via `make e2e-up`: database (`docker compose up -d`), backend (`./gradlew bootRun`, waits until ready on port 8080), and frontend (`npm run dev`, waits until ready on port 3000).
+       2. Runs the full Playwright suite (`npm test` — all specs, no file filter; `--reporter=html,list` prints a summary and generates `e2e/playwright-report/`).
+       3. Stops the frontend, backend, and tears down Docker volumes (`make e2e-down`) regardless of pass or fail.
    - Screenshots are saved automatically to `e2e/test-results/` (`screenshot: 'on'` is set in `playwright.config.ts`).
    - Every existing test must still pass. Any regression must be fixed before proceeding.
-   - After the suite finishes (pass or fail): stop the frontend dev server and the backend API server, then tear down Docker services and remove volumes: `docker compose down -v` from `data-pumpster-server/`.
-8. Verify:
+9. Verify:
    - All acceptance criteria in the use case doc are met.
    - `npm run lint` passes (frontend — run from `data-pumpster-app/`).
    - `./gradlew test` passes (backend — run from `data-pumpster-server/`).
-   - `npm test` passes (E2E — run from `e2e/`).
-9. Create a PR with:
-   - Title: `[UC-XX] <use case title>`
-   - Body summarising what was implemented, the key technical decisions made, and how the acceptance criteria are satisfied.
-   - Paste the full `list` reporter output from `npm test` (pass/fail counts and test names).
-   - Embed one screenshot per key acceptance criterion from `e2e/test-results/` using `![description](relative/path)`.
-10. Update `docs/REQUIREMENTS.md` Use-Case Tracker:
+   - `make e2e` passes (run from repo root — starts services, runs full suite, tears down).
+10. Create a PR with:
+    - Title: `[UC-XX] <use case title>`
+    - Body summarising what was implemented, the key technical decisions made, and how the acceptance criteria are satisfied.
+    - Do not commit or attach test results, screenshots, or HTML reports — confirm in the PR body that all tests passed.
+11. Update `docs/REQUIREMENTS.md` Use-Case Tracker:
     - Change the UC row status to `✅ Complete — [PR #N](url)` using the URL returned by `gh pr create`.
     - Commit the update directly to the PR branch: `git add docs/REQUIREMENTS.md && git commit -m "docs: mark UC-XX complete with PR #N link"`.
     - Push the commit so it is included in the PR.
-11. Stop. Do not begin the next use case.
+12. Stop. Do not begin the next use case.

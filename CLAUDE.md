@@ -23,12 +23,19 @@ The project is licensed under MIT (Copyright 2026 Trung Nguyen).
 │   │   ├── README.md          # Entity model overview
 │   │   ├── import-jobs.md     # ImportJob entity definition
 │   │   └── products.md        # Product entity definition
-│   └── use-cases/
-│       ├── uc-01-upload-csv.md
-│       ├── uc-02-map-columns.md
-│       ├── uc-03-submit-import.md
-│       ├── uc-04-progress-stream.md
-│       └── uc-05-import-history.md
+│   ├── use-cases/
+│   │   ├── uc-01-upload-csv.md
+│   │   ├── uc-02-map-columns.md
+│   │   ├── uc-03-submit-import.md
+│   │   ├── uc-04-progress-stream.md
+│   │   └── uc-05-import-history.md
+│   ├── implementation-plan/
+│   │   ├── uc-01-upload-csv-implementation-plan.md
+│   │   ├── uc-02-map-columns-implementation-plan.md
+│   │   └── uc-03-submit-import-implementation-plan.md
+│   └── templates/
+│       ├── uc-template.md                        # Template for new use-case docs
+│       └── implementation-plan-template.md       # Template for new implementation plans
 ├── data-pumpster-app/          # Next.js frontend
 │   ├── app/                    # Next.js App Router directory
 │   │   ├── page.tsx           # Root page component
@@ -173,6 +180,8 @@ npm run lint
 - **Architecture**: `docs/architecture/ARCHITECTURE.md` — system architecture (Next.js + Spring Boot + PostgreSQL)
 - **Entity Model**: `docs/entity-model/` — entity definitions for `ImportJob` and `Product`
 - **Use Cases**: `docs/use-cases/` — five use cases covering upload, column mapping, import submission, progress streaming, and import history
+- **Implementation Plans**: `docs/implementation-plan/` — one plan per completed UC; created during the implement-uc workflow
+- **Templates**: `docs/templates/` — canonical templates for new use-case docs (`uc-template.md`) and implementation plans (`implementation-plan-template.md`)
 
 ## Development Workflow
 - Implement one use case at a time, in UC order.
