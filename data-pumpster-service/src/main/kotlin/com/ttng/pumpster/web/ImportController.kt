@@ -1,18 +1,27 @@
 package com.ttng.pumpster.web
 
+import com.ttng.pumpster.domain.ProgressEvent
 import com.ttng.pumpster.service.ImportJobService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.reactor.awaitSingle
+import kotlinx.coroutines.reactor.mono
 import org.springframework.core.io.buffer.DataBufferUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.http.codec.ServerSentEvent
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.http.codec.multipart.FormFieldPart
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.server.ServerWebExchange
+import reactor.core.publisher.Flux
+import java.util.UUID
 
 @RestController
 @RequestMapping("/api/v1")
@@ -39,5 +48,24 @@ class ImportController(private val importJobService: ImportJobService) {
         val jobId = importJobService.submitJob(fileBytes, mappingJson, totalRows)
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(mapOf("jobId" to jobId.toString()))
+    }
+
+    @GetMapping("/import/jobs/{jobId}/events", produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    fun streamJobEvents(
+        @PathVariable jobId: UUID,
+        @RequestHeader(value = "Last-Event-ID", required = false) lastEventId: Long?,
+    ): Flux<ServerSentEvent<ProgressEvent>> {
+        val notFound = ResponseStatusException(HttpStatus.NOT_FOUND, "Import job not found: $jobId")
+        return mono(Dispatchers.IO) {
+            importJobService.streamJobEvents(jobId, lastEventId)
+                ?: throw notFound
+        }
+            .flatMapMany { it }
+            .map { event ->
+                ServerSentEvent.builder<ProgressEvent>()
+                    .id(event.eventId.toString())
+                    .data(event)
+                    .build()
+            }
     }
 }

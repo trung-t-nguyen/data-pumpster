@@ -4,10 +4,24 @@ import path from 'path';
 export class ProgressPage {
   readonly jobId: Locator;
   readonly jobStatus: Locator;
+  readonly progressBar: Locator;
+  readonly insertedRows: Locator;
+  readonly skippedRows: Locator;
+  readonly successBanner: Locator;
+  readonly errorBanner: Locator;
+  readonly newImportButton: Locator;
+  readonly viewHistoryButton: Locator;
 
   constructor(readonly page: Page) {
     this.jobId = page.getByTestId('job-id');
     this.jobStatus = page.getByTestId('job-status');
+    this.progressBar = page.getByTestId('progress-bar');
+    this.insertedRows = page.getByTestId('inserted-rows');
+    this.skippedRows = page.getByTestId('skipped-rows');
+    this.successBanner = page.getByTestId('success-banner');
+    this.errorBanner = page.getByTestId('error-banner');
+    this.newImportButton = page.getByTestId('new-import-button');
+    this.viewHistoryButton = page.getByTestId('view-history-button');
   }
 }
 
