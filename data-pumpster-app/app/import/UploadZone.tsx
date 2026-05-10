@@ -1,6 +1,8 @@
 'use client';
 
 import { useCallback, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useImport } from './ImportContext';
 import type { WorkerResult } from './csv.worker';
 
 const LARGE_FILE_BYTES = 500 * 1024 * 1024;
@@ -25,6 +27,8 @@ export default function UploadZone() {
   const [dragging, setDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const workerRef = useRef<Worker | null>(null);
+  const { setParsed } = useImport();
+  const router = useRouter();
 
   const processFile = useCallback((file: File) => {
     const error = validateFile(file);
@@ -194,8 +198,11 @@ export default function UploadZone() {
             </button>
             <button
               type="button"
+              onClick={() => {
+                setParsed(state.result);
+                router.push('/import/map');
+              }}
               className="flex-1 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
-              aria-label="Continue to column mapping (coming in next step)"
             >
               Continue to Column Mapping →
             </button>
