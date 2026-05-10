@@ -173,3 +173,8 @@ npm run lint
 - **Architecture**: `docs/architecture/ARCHITECTURE.md` — system architecture (Next.js + Spring Boot + PostgreSQL)
 - **Entity Model**: `docs/entity-model/` — entity definitions for `ImportJob` and `Product`
 - **Use Cases**: `docs/use-cases/` — five use cases covering upload, column mapping, import submission, progress streaming, and import history
+
+## Development Workflow
+- Implement one use case at a time, in UC order.
+- Each UC must end with a PR before starting the next.
+- Do not start a UC if the previous one has no merged PR.
