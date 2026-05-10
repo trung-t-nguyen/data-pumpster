@@ -1,9 +1,9 @@
-package com.ttng.data_pumpster_server.service
+package com.ttng.pumpster.service
 
 import tools.jackson.databind.ObjectMapper
 import tools.jackson.module.kotlin.readValue
-import com.ttng.data_pumpster_server.domain.ImportJob
-import com.ttng.data_pumpster_server.repository.ImportJobRepository
+import com.ttng.pumpster.domain.ImportJob
+import com.ttng.pumpster.repository.ImportJobRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

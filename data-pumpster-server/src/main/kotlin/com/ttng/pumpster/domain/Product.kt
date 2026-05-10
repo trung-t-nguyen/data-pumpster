@@ -1,4 +1,4 @@
-package com.ttng.data_pumpster_server.domain
+package com.ttng.pumpster.domain
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

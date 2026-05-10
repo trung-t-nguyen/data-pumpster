@@ -1,4 +1,4 @@
-package com.ttng.data_pumpster_server.config
+package com.ttng.pumpster.config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.config.CorsRegistry

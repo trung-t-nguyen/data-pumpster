@@ -1,4 +1,4 @@
-package com.ttng.data_pumpster_server.config
+package com.ttng.pumpster.config
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -1,6 +1,6 @@
-package com.ttng.data_pumpster_server.repository
+package com.ttng.pumpster.repository
 
-import com.ttng.data_pumpster_server.domain.ImportJob
+import com.ttng.pumpster.domain.ImportJob
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.UUID
 

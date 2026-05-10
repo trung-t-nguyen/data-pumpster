@@ -1,6 +1,6 @@
-package com.ttng.data_pumpster_server.web
+package com.ttng.pumpster.web
 
-import com.ttng.data_pumpster_server.service.ImportJobService
+import com.ttng.pumpster.service.ImportJobService
 import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.core.io.buffer.DataBufferUtils
 import org.springframework.http.HttpStatus

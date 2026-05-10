@@ -1,4 +1,4 @@
-package com.ttng.data_pumpster_server
+package com.ttng.pumpster
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

@@ -50,7 +50,7 @@ The project is licensed under MIT (Copyright 2026 Trung Nguyen).
 ├── data-pumpster-server/       # Spring Boot Kotlin backend
 │   ├── src/
 │   │   ├── main/
-│   │   │   ├── kotlin/com/ttng/data_pumpster_server/
+│   │   │   ├── kotlin/com/ttng/pumpster/
 │   │   │   │   └── DataPumpsterServerApplication.kt
 │   │   │   └── resources/
 │   │   │       └── application.properties
@@ -137,7 +137,7 @@ npm run lint
 
 ### Backend Architecture
 - **Framework**: Spring Boot with reactive stack (WebFlux) for async request handling
-- **Package**: `com.ttng.data_pumpster_server` (note: hyphens converted to underscores)
+- **Package**: `com.ttng.pumpster`
 - **Database**: PostgreSQL with Spring Data JPA (synchronous ORM layer) + Kotlin Coroutines for reactive patterns
 - **Build Info**: Version `0.0.1-SNAPSHOT`, targeting Java 24
 
@@ -155,7 +155,7 @@ npm run lint
 
 ## Key Conventions
 
-1. **Kotlin Package Names**: Use underscores instead of hyphens (e.g., `data_pumpster_server`)
+1. **Kotlin Package Names**: Use underscores instead of hyphens (e.g., `pumpster`)
 2. **TypeScript/JSX**: All React components are `.tsx` files; use the `@/*` path alias
 3. **CSS**: Inline Tailwind classes; avoid separate CSS files except for global styles
 4. **Next.js Metadata**: Define using `Metadata` export in layout files

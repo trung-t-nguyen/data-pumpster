@@ -15,15 +15,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ./gradlew test
 
 # Run a single test class
-./gradlew test --tests "com.ttng.data_pumpster_server.SomeTest"
+./gradlew test --tests "com.ttng.pumpster.SomeTest"
 
 # Run a single test method
-./gradlew test --tests "com.ttng.data_pumpster_server.SomeTest.methodName"
+./gradlew test --tests "com.ttng.pumpster.SomeTest.methodName"
 ```
 
 ## Architecture
 
-**Package root:** `com.ttng.data_pumpster_server`
+**Package root:** `com.ttng.pumpster`
 
 The server is a Spring Boot WebFlux application. The reactive/async model is a hybrid: WebFlux handles HTTP reactively, but JPA/Hibernate is synchronous — bridged via Kotlin Coroutines using `withContext(Dispatchers.IO)`.
 

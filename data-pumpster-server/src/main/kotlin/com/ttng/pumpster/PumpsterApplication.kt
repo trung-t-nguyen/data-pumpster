@@ -1,4 +1,4 @@
-package com.ttng.data_pumpster_server
+package com.ttng.pumpster
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
