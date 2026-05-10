@@ -1,6 +1,6 @@
 # UC-04 — Monitor Import Progress in Real Time
 
-**Status:** ⬜ Not started
+**Status:** ✅ Complete — [PR #5](https://github.com/trung-t-nguyen/data-pumpster/pull/5)
 **Actor:** Data Operator
 **Goal:** Stay informed about how the import is progressing without having to refresh the page or guess when it will finish.
 

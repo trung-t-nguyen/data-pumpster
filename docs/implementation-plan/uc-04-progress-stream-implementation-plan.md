@@ -1,6 +1,6 @@
 # UC-04 — Monitor Import Progress in Real Time: Implementation Plan
 
-**Status:** In Progress
+**Status:** Complete — [PR #5](https://github.com/trung-t-nguyen/data-pumpster/pull/5)
 **Use Case:** [docs/use-cases/uc-04-progress-stream.md](../use-cases/uc-04-progress-stream.md)
 
 ---
