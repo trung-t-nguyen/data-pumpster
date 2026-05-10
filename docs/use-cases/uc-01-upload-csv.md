@@ -1,6 +1,6 @@
 # UC-01 — Upload a Product CSV File
 
-**Status:** ⬜ Not started
+**Status:** 🔄 In progress — [PR #1](https://github.com/trung-t-nguyen/data-pumpster/pull/1)
 **Actor:** Data Operator
 **Goal:** Bring an external CSV file of product data into the system in preparation for import.
 
