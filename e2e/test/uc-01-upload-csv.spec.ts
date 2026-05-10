@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import path from 'path';
 
-const fixtures = (name: string) => path.join(__dirname, 'fixtures', name);
+const fixtures = (name: string) => path.join(__dirname, '../fixtures', name);
 
 test.describe('UC-01 — Upload a Product CSV File', () => {
   test.beforeEach(async ({ page }) => {
