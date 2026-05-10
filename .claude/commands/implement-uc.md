@@ -12,20 +12,31 @@ Steps:
    - Backend concerns: transaction boundaries, error codes, idempotency
    - Any constraints or non-goals the creator wants to enforce
    Ask all questions in one batch and wait for answers before proceeding.
-5. Implement only what is required by this use case — no more, no less — respecting the creator's answers from step 4.
-6. Write E2E tests covering the golden path and key edge cases defined in the acceptance criteria:
-   - Use the project's existing E2E framework (check `package.json` for Playwright/Cypress or equivalent).
-   - Each acceptance criterion should map to at least one E2E test.
-   - Tests must start from the user-facing entry point (page load / API call) and assert the full observable outcome.
-   - Run the E2E suite and confirm all tests pass before proceeding.
-7. Verify:
+5. If the use case requires backend API endpoints:
+   a. Write the OpenAPI spec first in `docs/architecture/contracts/api/$ARGUMENTS.yaml` (OpenAPI 3.1).
+      - Define all paths, HTTP methods, request bodies, query params, and response schemas for this UC.
+      - Include error responses (4xx/5xx) with problem-detail shapes.
+      - **Show the spec to the creator and wait for approval before writing any backend code.**
+   b. Implement the backend strictly according to the approved spec — do not deviate.
+   c. Implement the frontend against the same spec (treat it as the source of truth).
+6. Implement only what is required by this use case — no more, no less — respecting the creator's answers from step 4.
+7. Write E2E tests in `e2e/tests/$ARGUMENTS.spec.ts` covering the golden path and key edge cases:
+   - Follow the conventions in `e2e/tests/base.ts` and existing specs for structure and imports.
+   - Add page-object helpers in `e2e/pages/` if the UC introduces new UI surfaces.
+   - Place any required test fixture files (CSV, etc.) in `e2e/fixtures/`.
+   - Each acceptance criterion must map to at least one test case.
+   - Run the **full** suite from the `e2e/` directory: `npm test` (no file filter — all specs, not just the new one).
+     `npm test` uses `--reporter=html,list`: it prints a list summary to stdout and generates the HTML report in `e2e/playwright-report/`.
+   - Screenshots are saved automatically to `e2e/test-results/` (`screenshot: 'on'` is set in `playwright.config.ts`).
+   - Every existing test must still pass. Any regression must be fixed before proceeding.
+8. Verify:
    - All acceptance criteria in the use case doc are met.
-   - `npm run lint` passes (frontend changes).
-   - `./gradlew test` passes (backend changes).
-   - E2E tests pass (`npx playwright test` or equivalent).
-8. Create a PR with:
+   - `npm run lint` passes (frontend — run from `data-pumpster-app/`).
+   - `./gradlew test` passes (backend — run from `data-pumpster-server/`).
+   - `npm test` passes (E2E — run from `e2e/`).
+9. Create a PR with:
    - Title: `[UC-XX] <use case title>`
    - Body summarising what was implemented, the key technical decisions made, and how the acceptance criteria are satisfied.
-   - Attach the E2E test results: copy the summary output from the test run (pass/fail counts, test names) into the PR body.
-   - Embed screenshots: for each key acceptance criterion, include a screenshot captured during the E2E run (found in `e2e/playwright-report/` or the configured output dir) using GitHub markdown `![description](path)` syntax or as file attachments via `gh pr create`.
-8. Stop. Do not begin the next use case.
+   - Paste the full `list` reporter output from `npm test` (pass/fail counts and test names).
+   - Embed one screenshot per key acceptance criterion from `e2e/test-results/` using `![description](relative/path)`.
+9. Stop. Do not begin the next use case.
