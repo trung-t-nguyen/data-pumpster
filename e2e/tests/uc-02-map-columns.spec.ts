@@ -37,8 +37,7 @@ test.describe('UC-02 — Map CSV Columns to Product Schema', () => {
 
     await mapPage.startImportButton.click();
 
-    // UC-03 not implemented; expect navigation attempt (404 or redirect)
-    // The key assertion is that Start Import was clickable after mapping is valid.
+    // Expects navigation to /import/progress (requires live backend)
     await expect(mapPage.page).not.toHaveURL(/\/import\/map/);
   });
 
@@ -95,8 +94,11 @@ test.describe('UC-02 — Map CSV Columns to Product Schema', () => {
 
     await mapPage.startImportButton.click();
 
-    // No errors for optional fields
-    await expect(mapPage.page.getByRole('alert')).toHaveCount(0);
+    // No field-validation errors shown for optional fields
+    // (uses a text filter to exclude the Next.js route-change announcer)
+    await expect(
+      mapPage.page.getByRole('alert').filter({ hasText: /is required to proceed/ }),
+    ).toHaveCount(0);
   });
 
   // -------------------------------------------------------------------------

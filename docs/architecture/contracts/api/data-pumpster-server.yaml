@@ -1,0 +1,107 @@
+openapi: 3.1.0
+info:
+  title: Data Pumpster API
+  version: 1.0.0
+
+paths:
+  /api/v1/import/jobs:
+    post:
+      summary: Submit a new import job
+      description: >
+        Accepts a CSV file and a column-mapping object. Creates an ImportJob
+        record in `pending` state, acknowledges immediately with 202, then
+        processes the file asynchronously using the PostgreSQL COPY protocol.
+      operationId: submitImportJob
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+                - mapping
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The CSV file to import.
+                mapping:
+                  type: string
+                  format: json
+                  description: >
+                    JSON-encoded object mapping each database column to the
+                    corresponding CSV header. Only required fields (sku, name,
+                    price) must be present and non-empty. Optional fields may
+                    be omitted or set to empty string (stored as NULL).
+                  example: '{"sku":"sku","name":"product_name","price":"unit_price","brand":"brand_name"}'
+                totalRows:
+                  type: integer
+                  description: >
+                    Client-side estimate of data row count (headers excluded).
+                    Stored as `total_rows` on the job for progress display.
+                    Optional — null if the client could not determine it.
+      responses:
+        '202':
+          description: Job accepted and queued for background processing.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobAccepted'
+        '400':
+          description: Invalid request — missing required mapping fields or malformed payload.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              examples:
+                missingRequiredField:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: "Required mapping field 'sku' is missing or empty."
+                    instance: /api/v1/import/jobs
+                malformedMapping:
+                  value:
+                    type: about:blank
+                    title: Bad Request
+                    status: 400
+                    detail: "Field 'mapping' is not valid JSON."
+                    instance: /api/v1/import/jobs
+        '500':
+          description: Unexpected server error during job creation.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+
+components:
+  schemas:
+    JobAccepted:
+      type: object
+      required:
+        - jobId
+      properties:
+        jobId:
+          type: string
+          format: uuid
+          description: Unique identifier of the created import job.
+          example: 205154a0-95cd-4a0e-92a2-c2e53c0cb595
+
+    ProblemDetail:
+      type: object
+      description: RFC 9457 Problem Details for HTTP APIs.
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
