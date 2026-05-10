@@ -13,11 +13,15 @@ Steps:
    - Any constraints or non-goals the creator wants to enforce
    Ask all questions in one batch and wait for answers before proceeding.
 5. If the use case requires backend API endpoints:
-   a. Write the OpenAPI spec first in `docs/architecture/contracts/api/$ARGUMENTS.yaml` (OpenAPI 3.1).
+   a. Add the new endpoints to the single service spec at `docs/architecture/contracts/api/data-pumpster-server.yaml` (OpenAPI 3.1). Create the file if it does not yet exist.
       - Define all paths, HTTP methods, request bodies, query params, and response schemas for this UC.
       - Include error responses (4xx/5xx) with problem-detail shapes.
-      - **Show the spec to the creator and wait for approval before writing any backend code.**
+      - Do not remove or modify existing paths from previous UCs.
+      - **Show the updated spec to the creator and wait for approval before writing any backend code.**
    b. Implement the backend strictly according to the approved spec — do not deviate.
+      - Every backend class (service, repository, controller, mapper, validator) must have a corresponding unit test in `data-pumpster-server/src/test/kotlin/`.
+      - Use JUnit 5 + Mockito (or MockK) to test each class in isolation; mock all collaborators.
+      - Test the happy path and all documented error/edge cases from the spec.
    c. Implement the frontend against the same spec (treat it as the source of truth).
 6. Implement only what is required by this use case — no more, no less — respecting the creator's answers from step 4.
    - **UI implementation must follow the prototype at `prototype/Data-Pumpster-Standalone.html`** — match layout, component structure, copy, and interaction patterns as closely as possible. Only deviate where the use case doc or creator's answers explicitly override the prototype.
@@ -26,10 +30,12 @@ Steps:
    - Add page-object helpers in `e2e/pages/` if the UC introduces new UI surfaces.
    - Place any required test fixture files (CSV, etc.) in `e2e/fixtures/`.
    - Each acceptance criterion must map to at least one test case.
+   - Before running tests, start backing services: `docker compose up -d` from `data-pumpster-server/`.
    - Run the **full** suite from the `e2e/` directory: `npm test` (no file filter — all specs, not just the new one).
      `npm test` uses `--reporter=html,list`: it prints a list summary to stdout and generates the HTML report in `e2e/playwright-report/`.
    - Screenshots are saved automatically to `e2e/test-results/` (`screenshot: 'on'` is set in `playwright.config.ts`).
    - Every existing test must still pass. Any regression must be fixed before proceeding.
+   - After the suite finishes (pass or fail): stop the frontend dev server and the backend API server, then tear down Docker services and remove volumes: `docker compose down -v` from `data-pumpster-server/`.
 8. Verify:
    - All acceptance criteria in the use case doc are met.
    - `npm run lint` passes (frontend — run from `data-pumpster-app/`).
