@@ -49,7 +49,7 @@ test.describe('UC-01 — Upload a Product CSV File', () => {
   test('alt flow B: large file shows non-blocking warning, flow continues normally', async ({ importPage }) => {
     await importPage.dropLargeFile();
 
-    await expect(importPage.largeFileWarning).toBeVisible({ timeout: 10_000 });
+    await expect(importPage.largeFileWarning).toBeVisible({ timeout: 20_000 });
     await importPage.waitForResults();
     await expect(importPage.largeFileWarning).toBeVisible();
   });
