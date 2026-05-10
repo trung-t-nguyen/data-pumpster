@@ -21,7 +21,7 @@ UC-03 spans both layers. The frontend (`MappingPanel`) posts the CSV file and ma
 | `app/import/progress/page.tsx` | Progress page: reads `jobId` query param, renders `WizardSteps` (step 3 of 3) and `ProgressPanel` |
 | `app/import/progress/ProgressPanel.tsx` | Displays job ID and "Pending" status badge; placeholder for real-time streaming (UC-04) |
 
-### Backend (`data-pumpster-server/`)
+### Backend (`data-pumpster-service/`)
 
 | File | Role |
 |------|------|

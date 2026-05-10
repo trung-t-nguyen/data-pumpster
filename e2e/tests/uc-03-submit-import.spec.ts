@@ -3,7 +3,7 @@ import { expect, test } from './base';
 
 /**
  * These tests require the Spring Boot backend to be running on http://localhost:8080.
- * Start it with: cd data-pumpster-server && ./gradlew bootRun
+ * Start it with: cd data-pumpster-service && ./gradlew bootRun
  *
  * Error-flow tests use Playwright route interception and do NOT need the backend.
  */

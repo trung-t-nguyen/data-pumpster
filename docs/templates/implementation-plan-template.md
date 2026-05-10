@@ -19,7 +19,7 @@
 |------|------|
 | `app/[path]/[File].tsx` | [What this file does and why it exists for this UC] |
 
-### Backend (`data-pumpster-server/`)
+### Backend (`data-pumpster-service/`)
 
 | File | Role |
 |------|------|

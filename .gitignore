@@ -12,14 +12,14 @@ data-pumpster-app/.env*.local
 data-pumpster-app/next-env.d.ts
 
 # Gradle
-data-pumpster-server/.gradle/
-data-pumpster-server/build/
-data-pumpster-server/out/
-!data-pumpster-server/gradle/wrapper/gradle-wrapper.jar
+data-pumpster-service/.gradle/
+data-pumpster-service/build/
+data-pumpster-service/out/
+!data-pumpster-service/gradle/wrapper/gradle-wrapper.jar
 
 # Spring Boot / Kotlin
-data-pumpster-server/src/main/resources/application-local.properties
-data-pumpster-server/src/main/resources/application-secret.properties
+data-pumpster-service/src/main/resources/application-local.properties
+data-pumpster-service/src/main/resources/application-secret.properties
 
 # Java
 *.class

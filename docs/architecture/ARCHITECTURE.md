@@ -22,7 +22,7 @@
 
 ## Dependency Changes
 
-### Backend (`data-pumpster-server/build.gradle`)
+### Backend (`data-pumpster-service/build.gradle`)
 - Add `implementation 'org.apache.commons:commons-csv:1.12.0'`
 
 ### Frontend (`data-pumpster-app/`)

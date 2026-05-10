@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **data-pumpster** is a full-stack monorepo consisting of two parts:
 
 1. **data-pumpster-app**: A Next.js 16.2.6 frontend application (React 19.2.4) with TypeScript, Tailwind CSS v4, and ESLint
-2. **data-pumpster-server**: A Spring Boot 4.0.6 Kotlin backend with reactive WebFlux, Spring Data JPA, and PostgreSQL
+2. **data-pumpster-service**: A Spring Boot 4.0.6 Kotlin backend with reactive WebFlux, Spring Data JPA, and PostgreSQL
 
 The project is licensed under MIT (Copyright 2026 Trung Nguyen).
 
@@ -47,7 +47,7 @@ The project is licensed under MIT (Copyright 2026 Trung Nguyen).
 │   ├── next.config.ts         # Next.js configuration
 │   ├── eslint.config.mjs      # ESLint v9 flat config
 │   └── postcss.config.mjs     # PostCSS with Tailwind plugin
-├── data-pumpster-server/       # Spring Boot Kotlin backend
+├── data-pumpster-service/       # Spring Boot Kotlin backend
 │   ├── src/
 │   │   ├── main/
 │   │   │   ├── kotlin/com/ttng/pumpster/
@@ -72,7 +72,7 @@ The project is licensed under MIT (Copyright 2026 Trung Nguyen).
 - **Tailwind CSS** v4 (with @tailwindcss/postcss plugin)
 - **ESLint** v9 (with Next.js core web vitals and TypeScript rules)
 
-### Backend (data-pumpster-server)
+### Backend (data-pumpster-service)
 - **Spring Boot** 4.0.6 (Spring Framework 7.0.7)
 - **Kotlin** 2.2.21
 - **Spring Data JPA** with Hibernate ORM 7.2.12
@@ -103,7 +103,7 @@ npm run lint
 
 **Note**: The app uses Next.js 16 which may have breaking changes from training data. Refer to `node_modules/next/dist/docs/` when writing new features.
 
-### Backend (data-pumpster-server)
+### Backend (data-pumpster-service)
 
 ```bash
 # Run development server with Docker Compose services
@@ -164,14 +164,14 @@ npm run lint
 ## Development Workflow
 
 1. **Frontend changes**: Edit files in `data-pumpster-app/app/`, run `npm run dev` for hot reload
-2. **Backend changes**: Edit Kotlin files in `data-pumpster-server/src/main/kotlin/`, run `./gradlew bootRun`
+2. **Backend changes**: Edit Kotlin files in `data-pumpster-service/src/main/kotlin/`, run `./gradlew bootRun`
 3. **Database**: Start PostgreSQL via `./gradlew bootRun` (auto-managed by Spring Boot DevTools)
 4. **Testing**: Run `npm run lint` for frontend; `./gradlew test` for backend
 
 ## Additional Resources
 
 - **Frontend README**: `data-pumpster-app/README.md` (generic Next.js setup)
-- **Backend Help**: `data-pumpster-server/HELP.md` (detailed build, native image, GraalVM info)
+- **Backend Help**: `data-pumpster-service/HELP.md` (detailed build, native image, GraalVM info)
 - **GitHub**: https://github.com/trung-t-nguyen/data-pumpster
 
 ## Project Documentation (`docs/`)

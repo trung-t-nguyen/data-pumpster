@@ -21,13 +21,13 @@ Steps:
    - E2E Test Coverage (test case → scenario table)
    **Show the plan to the creator and wait for explicit approval before proceeding.**
 6. If the use case requires backend API endpoints:
-   a. Add the new endpoints to the single service spec at `docs/architecture/contracts/api/data-pumpster-server.yaml` (OpenAPI 3.1). Create the file if it does not yet exist.
+   a. Add the new endpoints to the single service spec at `docs/architecture/contracts/api/data-pumpster-service.yaml` (OpenAPI 3.1). Create the file if it does not yet exist.
       - Define all paths, HTTP methods, request bodies, query params, and response schemas for this UC.
       - Include error responses (4xx/5xx) with problem-detail shapes.
       - Do not remove or modify existing paths from previous UCs.
       - **Show the updated spec to the creator and wait for approval before writing any backend code.**
    b. Implement the backend strictly according to the approved spec — do not deviate.
-      - Every backend class (service, repository, controller, mapper, validator) must have a corresponding unit test in `data-pumpster-server/src/test/kotlin/`.
+      - Every backend class (service, repository, controller, mapper, validator) must have a corresponding unit test in `data-pumpster-service/src/test/kotlin/`.
       - Use JUnit 5 + Mockito (or MockK) to test each class in isolation; mock all collaborators.
       - Test the happy path and all documented error/edge cases from the spec.
    c. Implement the frontend against the same spec (treat it as the source of truth).
@@ -47,7 +47,7 @@ Steps:
 9. Verify:
    - All acceptance criteria in the use case doc are met.
    - `npm run lint` passes (frontend — run from `data-pumpster-app/`).
-   - `./gradlew test` passes (backend — run from `data-pumpster-server/`).
+   - `./gradlew test` passes (backend — run from `data-pumpster-service/`).
    - `make e2e` passes (run from repo root — starts services, runs full suite, tears down).
 10. Create a PR with:
     - Title: `[UC-XX] <use case title>`
