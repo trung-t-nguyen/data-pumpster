@@ -20,6 +20,7 @@ Steps:
    b. Implement the backend strictly according to the approved spec — do not deviate.
    c. Implement the frontend against the same spec (treat it as the source of truth).
 6. Implement only what is required by this use case — no more, no less — respecting the creator's answers from step 4.
+   - **UI implementation must follow the prototype at `prototype/Data-Pumpster-Standalone.html`** — match layout, component structure, copy, and interaction patterns as closely as possible. Only deviate where the use case doc or creator's answers explicitly override the prototype.
 7. Write E2E tests in `e2e/tests/$ARGUMENTS.spec.ts` covering the golden path and key edge cases:
    - Follow the conventions in `e2e/tests/base.ts` and existing specs for structure and imports.
    - Add page-object helpers in `e2e/pages/` if the UC introduces new UI surfaces.

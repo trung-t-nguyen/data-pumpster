@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import MappingPanel from './MappingPanel';
+import WizardSteps from '../WizardSteps';
 
 export const metadata: Metadata = {
   title: 'Map Columns — Data Pumpster',
@@ -8,13 +9,14 @@ export const metadata: Metadata = {
 
 export default function MapPage() {
   return (
-    <main className="mx-auto w-full max-w-2xl px-4 py-16">
+    <main className="mx-auto w-full max-w-2xl px-4 py-10">
+      <WizardSteps currentStep={2} />
       <div className="mb-8">
         <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Map Columns
+          Map CSV Columns
         </h1>
         <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          Match each database field to the corresponding column in your CSV file.
+          Match your CSV headers to the database schema.
         </p>
       </div>
       <MappingPanel />

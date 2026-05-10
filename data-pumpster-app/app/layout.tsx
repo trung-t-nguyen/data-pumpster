@@ -27,7 +27,19 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <header className="sticky top-0 z-10 border-b border-border bg-background">
+          <div className="mx-auto flex max-w-5xl items-center px-6 py-4">
+            <div className="flex items-center gap-2">
+              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-foreground text-[0.6875rem] font-bold text-background">
+                DP
+              </div>
+              <span className="text-[1.125rem] font-bold text-foreground">Data Pumpster</span>
+            </div>
+          </div>
+        </header>
+        {children}
+      </body>
     </html>
   );
 }

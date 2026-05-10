@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useImport } from '../ImportContext';
-import { Badge } from '@/components/ui/badge';
 import {
   SCHEMA_COLUMNS,
   buildAutoMapping,
@@ -58,78 +57,71 @@ export default function MappingPanel() {
         <span className="text-muted-foreground">{rowCount.toLocaleString()} rows</span>
       </div>
 
-      {/* Mapping table */}
-      <div className="rounded-xl border border-border bg-card">
-        <div className="grid grid-cols-[1fr_1.5fr_auto] gap-x-4 border-b border-border px-4 py-2.5 text-xs font-medium uppercase tracking-widest text-muted-foreground">
-          <span>Database column</span>
-          <span>CSV header</span>
-          <span className="w-16 text-right">Required</span>
-        </div>
+      {/* Mapping rows */}
+      <div className="flex flex-col gap-3">
+        {SCHEMA_COLUMNS.map((col) => {
+          const selected = mapping[col.dbColumn] ?? '';
+          const isDupe = !!selected && duplicates.has(selected);
+          const hasError = !!errors[col.dbColumn];
 
-        <div className="divide-y divide-border">
-          {SCHEMA_COLUMNS.map((col) => {
-            const selected = mapping[col.dbColumn] ?? '';
-            const isDupe = !!selected && duplicates.has(selected);
-            const hasError = !!errors[col.dbColumn];
-
-            return (
-              <div
-                key={col.dbColumn}
-                className="grid grid-cols-[1fr_1.5fr_auto] items-start gap-x-4 px-4 py-3"
-              >
-                {/* Column label */}
-                <div className="flex flex-col gap-0.5 pt-1.5">
-                  <span className="text-sm font-medium text-foreground">{col.label}</span>
-                  <span className="font-mono text-xs text-muted-foreground">{col.dbColumn}</span>
-                </div>
-
-                {/* Dropdown */}
-                <div className="flex flex-col gap-1">
-                  <select
-                    aria-label={`Map ${col.label}`}
-                    value={selected}
-                    onChange={(e) => handleChange(col.dbColumn, e.target.value)}
-                    className={[
-                      'h-8 w-full rounded-lg border bg-transparent px-2.5 text-sm outline-none transition-colors focus:ring-2 focus:ring-ring/50',
-                      hasError
-                        ? 'border-destructive text-destructive focus:ring-destructive/30'
-                        : isDupe
-                          ? 'border-amber-400 focus:ring-amber-200'
-                          : 'border-input focus:border-ring',
-                    ].join(' ')}
+          return (
+            <div
+              key={col.dbColumn}
+              className="grid grid-cols-[1fr_1.5rem_1fr] items-center gap-4 rounded-lg border border-border bg-muted/50 p-4"
+            >
+              {/* Left: schema field label */}
+              <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                <span>{col.label}</span>
+                {col.required && (
+                  <span
+                    data-testid="required-badge"
+                    className="rounded-full border border-border px-1.5 py-0.5 text-xs text-muted-foreground"
                   >
-                    <option value="">— None —</option>
-                    {headers.map((h) => (
-                      <option key={h} value={h}>
-                        {h}
-                      </option>
-                    ))}
-                  </select>
-
-                  {hasError && (
-                    <p role="alert" className="text-xs text-destructive">
-                      {errors[col.dbColumn]}
-                    </p>
-                  )}
-                  {isDupe && !hasError && (
-                    <p className="text-xs text-amber-600 dark:text-amber-400">
-                      This CSV column is already mapped elsewhere.
-                    </p>
-                  )}
-                </div>
-
-                {/* Required badge */}
-                <div className="flex w-16 justify-end pt-1">
-                  {col.required && (
-                    <Badge data-testid="required-badge" variant="outline" className="text-xs">
-                      Required
-                    </Badge>
-                  )}
-                </div>
+                    Required
+                  </span>
+                )}
               </div>
-            );
-          })}
-        </div>
+
+              {/* Arrow */}
+              <div className="text-center text-muted-foreground">→</div>
+
+              {/* Right: CSV header dropdown */}
+              <div className="flex flex-col gap-1">
+                <select
+                  aria-label={`Map ${col.label}`}
+                  value={selected}
+                  onChange={(e) => handleChange(col.dbColumn, e.target.value)}
+                  className={[
+                    'h-8 w-full rounded-lg border bg-background px-2.5 text-sm outline-none transition-colors focus:ring-2 focus:ring-ring/50',
+                    hasError
+                      ? 'border-destructive text-destructive focus:ring-destructive/30'
+                      : isDupe
+                        ? 'border-amber-400 focus:ring-amber-200'
+                        : 'border-input focus:border-ring',
+                  ].join(' ')}
+                >
+                  <option value="">— Not mapped —</option>
+                  {headers.map((h) => (
+                    <option key={h} value={h}>
+                      {h}
+                    </option>
+                  ))}
+                </select>
+
+                {hasError && (
+                  <p role="alert" className="text-xs text-destructive">
+                    {errors[col.dbColumn]}
+                  </p>
+                )}
+                {isDupe && !hasError && (
+                  <p className="text-xs text-amber-600 dark:text-amber-400">
+                    This CSV column is already mapped elsewhere.
+                  </p>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Actions */}
