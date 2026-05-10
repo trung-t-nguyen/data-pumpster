@@ -180,7 +180,8 @@ test.describe('UC-03 — Submit an Import Job', () => {
 
   test('direct navigation without jobId shows error message', async ({ page }) => {
     await page.goto('/import/progress');
-    await expect(page.getByRole('alert')).toBeVisible();
-    await expect(page.getByRole('alert')).toContainText(/no job id/i);
+    const errorAlert = page.getByRole('alert').filter({ hasText: /no job id/i });
+    await expect(errorAlert).toBeVisible();
+    await expect(errorAlert).toContainText(/no job id/i);
   });
 });

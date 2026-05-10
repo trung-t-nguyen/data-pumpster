@@ -22,5 +22,9 @@ stop:
 	cd data-pumpster-server && docker compose down -v
 
 e2e:
-	$(MAKE) start
+	$(MAKE) start-db
+	cd data-pumpster-server && nohup ./gradlew bootRun > /tmp/backend.log 2>&1 &
+	@echo "Waiting for backend on :8080..."
+	@until curl -sf --max-time 2 http://localhost:8080/actuator/health > /dev/null 2>&1; do sleep 3; done
+	@echo "Backend ready."
 	cd e2e && npm test; CODE=$$?; $(MAKE) stop; exit $$CODE
