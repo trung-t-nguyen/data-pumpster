@@ -10,6 +10,8 @@ import {
   mappingSchema,
 } from './schema';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080';
+
 export default function MappingPanel() {
   const { parsed, setMapping: saveMapping } = useImport();
   const router = useRouter();
@@ -22,6 +24,8 @@ export default function MappingPanel() {
     parsed ? buildAutoMapping(parsed.headers) : {},
   );
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const duplicates = useMemo(() => findDuplicateMappings(mapping), [mapping]);
 
@@ -34,7 +38,7 @@ export default function MappingPanel() {
     if (errors[dbColumn]) setErrors((prev) => ({ ...prev, [dbColumn]: '' }));
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const result = mappingSchema.safeParse(mapping);
     if (!result.success) {
       const fieldErrors: Record<string, string> = {};
@@ -45,8 +49,36 @@ export default function MappingPanel() {
       setErrors(fieldErrors);
       return;
     }
-    saveMapping(mapping);
-    router.push('/import/progress');
+
+    setSubmitError(null);
+    setIsSubmitting(true);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('mapping', JSON.stringify(mapping));
+      formData.append('totalRows', String(rowCount));
+
+      const res = await fetch(`${API_URL}/api/v1/import/jobs`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        const detail = body?.detail ?? `Server error (${res.status})`;
+        setSubmitError(detail);
+        return;
+      }
+
+      const { jobId } = await res.json();
+      saveMapping(mapping);
+      router.push(`/import/progress?jobId=${jobId}`);
+    } catch {
+      setSubmitError('Upload failed. Please check your connection and try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -124,21 +156,35 @@ export default function MappingPanel() {
         })}
       </div>
 
+      {/* Submit error banner */}
+      {submitError && (
+        <div
+          role="alert"
+          data-testid="submit-error"
+          className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+        >
+          {submitError}
+        </div>
+      )}
+
       {/* Actions */}
       <div className="flex gap-3">
         <button
           type="button"
           onClick={() => router.push('/import')}
-          className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted"
+          disabled={isSubmitting}
+          className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted disabled:opacity-50"
         >
           ← Back
         </button>
         <button
           type="button"
           onClick={handleSubmit}
-          className="flex-1 rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors hover:opacity-90"
+          disabled={isSubmitting}
+          data-testid="start-import"
+          className="flex-1 rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors hover:opacity-90 disabled:opacity-50"
         >
-          Start Import
+          {isSubmitting ? 'Submitting…' : 'Start Import'}
         </button>
       </div>
     </div>
