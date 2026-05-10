@@ -47,5 +47,3 @@ logs/
 .env.local
 .env.*.local
 
-# CLAUDE.md (project-local AI instructions)
-CLAUDE.md
