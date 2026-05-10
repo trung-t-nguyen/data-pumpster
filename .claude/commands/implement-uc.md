@@ -19,6 +19,7 @@ Steps:
    - Key Design Decisions (non-obvious choices with rationale)
    - Business Rules Enforced (rule → where enforced table)
    - E2E Test Coverage (test case → scenario table)
+   After writing the plan, add a link to it in `docs/use-cases/$ARGUMENTS.md` — e.g. a `## Implementation Plan` section or an inline reference: `[Implementation Plan](../implementation-plan/$ARGUMENTS-implementation-plan.md)`.
    **Show the plan to the creator and wait for explicit approval before proceeding.**
 6. If the use case requires backend API endpoints:
    a. Add the new endpoints to the single service spec at `docs/architecture/contracts/api/data-pumpster-service.yaml` (OpenAPI 3.1). Create the file if it does not yet exist.
@@ -53,8 +54,10 @@ Steps:
     - Title: `[UC-XX] <use case title>`
     - Body summarising what was implemented, the key technical decisions made, and how the acceptance criteria are satisfied.
     - Do not commit or attach test results, screenshots, or HTML reports — confirm in the PR body that all tests passed.
-11. Update `docs/REQUIREMENTS.md` Use-Case Tracker:
-    - Change the UC row status to `✅ Complete — [PR #N](url)` using the URL returned by `gh pr create`.
-    - Commit the update directly to the PR branch: `git add docs/REQUIREMENTS.md && git commit -m "docs: mark UC-XX complete with PR #N link"`.
+11. Mark the use case and implementation plan as complete, then update the tracker:
+    a. In `docs/use-cases/$ARGUMENTS.md`, update the status field to `✅ Complete`.
+    b. In `docs/implementation-plan/$ARGUMENTS-implementation-plan.md`, update the status field to `✅ Complete`.
+    c. Update `docs/REQUIREMENTS.md` Use-Case Tracker: change the UC row status to `✅ Complete — [PR #N](url)` using the URL returned by `gh pr create`.
+    - Commit all three files in one commit directly to the PR branch: `git add docs/use-cases/$ARGUMENTS.md docs/implementation-plan/$ARGUMENTS-implementation-plan.md docs/REQUIREMENTS.md && git commit -m "docs: mark UC-XX complete with PR #N link"`.
     - Push the commit so it is included in the PR.
 12. Stop. Do not begin the next use case.
