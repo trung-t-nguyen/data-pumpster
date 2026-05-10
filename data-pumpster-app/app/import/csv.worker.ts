@@ -22,6 +22,7 @@ onmessage = (event: MessageEvent<File>) => {
       let rowCount = 0;
       Papa.parse<Record<string, string>>(file, {
         header: true,
+        skipEmptyLines: true,
         step: () => {
           rowCount++;
         },
