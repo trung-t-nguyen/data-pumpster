@@ -3,6 +3,7 @@ package com.ttng.pumpster.service
 import tools.jackson.databind.ObjectMapper
 import tools.jackson.module.kotlin.readValue
 import com.ttng.pumpster.domain.ImportJob
+import com.ttng.pumpster.domain.ProgressEvent
 import com.ttng.pumpster.repository.ImportJobRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +15,7 @@ import org.apache.commons.csv.CSVPrinter
 import org.postgresql.copy.CopyManager
 import org.postgresql.core.BaseConnection
 import org.springframework.stereotype.Service
+import reactor.core.publisher.Flux
 import java.io.ByteArrayInputStream
 import java.io.InputStreamReader
 import java.io.StringWriter
@@ -27,6 +29,7 @@ class ImportJobService(
     private val dataSource: DataSource,
     private val objectMapper: ObjectMapper,
     private val applicationScope: CoroutineScope,
+    private val progressService: ProgressService,
 ) {
     companion object {
         private val STAGING_COLUMNS = listOf(
@@ -53,6 +56,8 @@ class ImportJobService(
             val job = ImportJob(totalRows = totalRows)
             importJobRepository.save(job)
 
+            progressService.createStream(job.id)
+
             applicationScope.launch(Dispatchers.IO) {
                 processImport(job.id, fileBytes, mapping)
             }
@@ -66,6 +71,7 @@ class ImportJobService(
         }
         job.status = "processing"
         importJobRepository.save(job)
+        progressService.emit(jobId, "processing", totalRows = job.totalRows)
 
         try {
             val (insertedRows, skippedRows) = copyData(jobId, fileBytes, mapping)
@@ -74,13 +80,39 @@ class ImportJobService(
             job.skippedRows = skippedRows
             job.completedAt = OffsetDateTime.now()
             importJobRepository.save(job)
+            progressService.emit(
+                jobId, "completed",
+                insertedRows = insertedRows, skippedRows = skippedRows, totalRows = job.totalRows,
+            )
         } catch (e: Exception) {
             job.status = "failed"
             job.errorDescription = e.message ?: "Unknown error occurred during import."
             job.completedAt = OffsetDateTime.now()
             importJobRepository.save(job)
+            progressService.emit(
+                jobId, "failed",
+                errorDescription = job.errorDescription, totalRows = job.totalRows,
+            )
         }
     }
+
+    suspend fun streamJobEvents(jobId: UUID, afterEventId: Long?): Flux<ProgressEvent>? =
+        withContext(Dispatchers.IO) {
+            val job = importJobRepository.findById(jobId).orElse(null) ?: return@withContext null
+            progressService.streamFrom(jobId, afterEventId) ?: buildTerminalFlux(job)
+        }
+
+    private fun buildTerminalFlux(job: ImportJob): Flux<ProgressEvent> =
+        Flux.just(
+            ProgressEvent(
+                eventId = 1L,
+                status = job.status,
+                insertedRows = job.insertedRows,
+                skippedRows = job.skippedRows,
+                totalRows = job.totalRows,
+                errorDescription = job.errorDescription,
+            ),
+        )
 
     private fun copyData(jobId: UUID, fileBytes: ByteArray, mapping: Map<String, String>): Pair<Int, Int> {
         dataSource.connection.use { conn ->

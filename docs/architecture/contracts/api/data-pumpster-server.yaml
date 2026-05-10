@@ -76,8 +76,105 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProblemDetail'
 
+  /api/v1/import/jobs/{jobId}/events:
+    get:
+      summary: Stream import job progress events via SSE
+      description: >
+        Opens a Server-Sent Events stream for the specified job. Emits a
+        `processing` event when the import starts and a `completed` or `failed`
+        event when it finishes, then closes the stream. If the job has already
+        reached a terminal state before the client connects, the terminal event
+        is emitted immediately. Supports `Last-Event-ID` for reconnection —
+        only events with `eventId` greater than the supplied value are replayed.
+      operationId: streamJobEvents
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID of the import job to monitor.
+        - name: Last-Event-ID
+          in: header
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: >
+            Last SSE event ID received by the client. When provided, only events
+            with an `eventId` greater than this value are replayed.
+      responses:
+        '200':
+          description: SSE stream of progress events (Content-Type: text/event-stream).
+          content:
+            text/event-stream:
+              schema:
+                $ref: '#/components/schemas/ProgressEvent'
+              examples:
+                processing:
+                  value: |
+                    id: 1
+                    data: {"eventId":1,"status":"processing","insertedRows":0,"skippedRows":0,"totalRows":500}
+
+                completed:
+                  value: |
+                    id: 2
+                    data: {"eventId":2,"status":"completed","insertedRows":490,"skippedRows":10,"totalRows":500}
+
+                failed:
+                  value: |
+                    id: 2
+                    data: {"eventId":2,"status":"failed","insertedRows":0,"skippedRows":0,"totalRows":500,"errorDescription":"Unexpected error during COPY"}
+
+        '404':
+          description: No import job found with the given ID.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              examples:
+                notFound:
+                  value:
+                    type: about:blank
+                    title: Not Found
+                    status: 404
+                    detail: "Import job not found: 205154a0-95cd-4a0e-92a2-c2e53c0cb595"
+                    instance: /api/v1/import/jobs/205154a0-95cd-4a0e-92a2-c2e53c0cb595/events
+
 components:
   schemas:
+    ProgressEvent:
+      type: object
+      required:
+        - eventId
+        - status
+        - insertedRows
+        - skippedRows
+      properties:
+        eventId:
+          type: integer
+          format: int64
+          description: Sequential event identifier used for Last-Event-ID replay.
+        status:
+          type: string
+          enum: [processing, completed, failed]
+          description: Current job status at the time of this event.
+        insertedRows:
+          type: integer
+          description: Rows successfully written to the products table so far.
+        skippedRows:
+          type: integer
+          description: Rows skipped due to constraint violations (e.g. duplicate SKU).
+        totalRows:
+          type: integer
+          nullable: true
+          description: Client-supplied estimate of total data rows; null if unknown.
+        errorDescription:
+          type: string
+          nullable: true
+          description: Human-readable failure reason; non-null only when status = failed.
+
     JobAccepted:
       type: object
       required:
