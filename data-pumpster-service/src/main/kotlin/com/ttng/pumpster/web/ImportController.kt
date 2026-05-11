@@ -2,6 +2,7 @@ package com.ttng.pumpster.web
 
 import com.ttng.pumpster.domain.ProgressEvent
 import com.ttng.pumpster.service.ImportJobService
+import com.ttng.pumpster.web.dto.ImportJobSummary
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.reactor.mono
@@ -26,6 +27,9 @@ import java.util.UUID
 @RestController
 @RequestMapping("/api/v1")
 class ImportController(private val importJobService: ImportJobService) {
+
+    @GetMapping("/import/jobs")
+    suspend fun listJobs(): List<ImportJobSummary> = importJobService.listJobs()
 
     @PostMapping("/import/jobs", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     suspend fun submitJob(exchange: ServerWebExchange): ResponseEntity<Map<String, String>> {

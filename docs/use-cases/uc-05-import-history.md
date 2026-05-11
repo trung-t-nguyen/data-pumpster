@@ -63,3 +63,9 @@ After running multiple imports over time, operators and team leads need a single
 - BR-02: All jobs are shown, including failed and in-progress ones; nothing is hidden.
 - BR-03: Jobs are ordered by start time, most recent first.
 - BR-04: The history is read-only; operators cannot edit or delete job records from this screen.
+
+---
+
+## Implementation Plan
+
+[Implementation Plan](../implementation-plan/uc-05-import-history-implementation-plan.md)
