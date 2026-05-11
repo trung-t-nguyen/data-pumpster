@@ -1,6 +1,6 @@
 # UC-05 — Review Import History: Implementation Plan
 
-**Status:** Not started
+**Status:** ✅ Complete
 **Use Case:** [docs/use-cases/uc-05-import-history.md](../use-cases/uc-05-import-history.md)
 
 ---
