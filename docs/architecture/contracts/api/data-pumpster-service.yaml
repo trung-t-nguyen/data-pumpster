@@ -5,6 +5,50 @@ info:
 
 paths:
   /api/v1/import/jobs:
+    get:
+      summary: List all import jobs
+      description: >
+        Returns all import jobs ordered by start time, most recent first.
+        Includes jobs in every state (pending, processing, completed, failed).
+        Used by the history view to render the import audit table.
+      operationId: listImportJobs
+      responses:
+        '200':
+          description: All import jobs, sorted most-recent first.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ImportJobSummary'
+              examples:
+                withJobs:
+                  value:
+                    - id: "205154a0-95cd-4a0e-92a2-c2e53c0cb595"
+                      status: "completed"
+                      totalRows: 500
+                      insertedRows: 490
+                      skippedRows: 10
+                      errorDescription: null
+                      startedAt: "2026-05-11T10:00:00Z"
+                      completedAt: "2026-05-11T10:00:42Z"
+                    - id: "11111111-0000-0000-0000-000000000001"
+                      status: "failed"
+                      totalRows: 200
+                      insertedRows: 0
+                      skippedRows: 0
+                      errorDescription: "COPY failed: invalid data on row 3"
+                      startedAt: "2026-05-10T09:00:00Z"
+                      completedAt: "2026-05-10T09:00:05Z"
+                empty:
+                  value: []
+        '500':
+          description: Unexpected server error.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+
     post:
       summary: Submit a new import job
       description: >
@@ -185,6 +229,47 @@ components:
           format: uuid
           description: Unique identifier of the created import job.
           example: 205154a0-95cd-4a0e-92a2-c2e53c0cb595
+
+    ImportJobSummary:
+      type: object
+      required:
+        - id
+        - status
+        - insertedRows
+        - skippedRows
+        - startedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the import job.
+        status:
+          type: string
+          enum: [pending, processing, completed, failed]
+          description: Current job state.
+        totalRows:
+          type: integer
+          nullable: true
+          description: Client-supplied estimate of total data rows; null if unknown.
+        insertedRows:
+          type: integer
+          description: Rows successfully written to the products table.
+        skippedRows:
+          type: integer
+          description: Rows skipped due to constraint violations (e.g. duplicate SKU).
+        errorDescription:
+          type: string
+          nullable: true
+          description: Human-readable failure reason; non-null only when status = failed.
+        startedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the job record was created (server time, UTC).
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: Timestamp when the job reached a terminal state; null while in progress.
 
     ProblemDetail:
       type: object

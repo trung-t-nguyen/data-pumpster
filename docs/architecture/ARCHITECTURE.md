@@ -17,6 +17,7 @@
 | CSV parsing (FE) | PapaParse `preview:1` + Web Worker | Header extraction without freezing UI |
 | UI components | shadcn/ui (Zinc palette) + Lucide icons | Matches spec |
 | DB schema | JPA/Hibernate DDL generation (`ddl-auto=create-drop` in dev, `validate` in prod) | Entity classes are the single source of truth; no separate SQL script to keep in sync |
+| History data fetch | `'use client'` component fetching on mount (not RSC async fetch) | Playwright `page.route()` only intercepts browser-initiated requests; server-side `fetch` inside RSCs runs in Node.js and cannot be mocked at the browser network level |
 
 ---
 
@@ -34,9 +35,9 @@
 
 ## Verification Checklist
 
-- [ ] `./gradlew bootRun` starts without errors and creates both DB tables
-- [ ] `psql` confirms `products` + `import_jobs` tables exist
-- [ ] `npm run dev` starts without errors
-- [ ] UC-01 through UC-05 pass their individual acceptance criteria
-- [ ] `./gradlew test` passes
-- [ ] `npm run lint` passes
+- [x] `./gradlew bootRun` starts without errors and creates both DB tables
+- [x] `psql` confirms `products` + `import_jobs` tables exist
+- [x] `npm run dev` starts without errors
+- [x] UC-01 through UC-05 pass their individual acceptance criteria
+- [x] `./gradlew test` passes
+- [x] `npm run lint` passes

@@ -5,6 +5,7 @@ import tools.jackson.module.kotlin.readValue
 import com.ttng.pumpster.domain.ImportJob
 import com.ttng.pumpster.domain.ProgressEvent
 import com.ttng.pumpster.repository.ImportJobRepository
+import com.ttng.pumpster.web.dto.ImportJobSummary
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -95,6 +96,22 @@ class ImportJobService(
             )
         }
     }
+
+    suspend fun listJobs(): List<ImportJobSummary> =
+        withContext(Dispatchers.IO) {
+            importJobRepository.findAllByOrderByStartedAtDesc().map { job ->
+                ImportJobSummary(
+                    id = job.id,
+                    status = job.status,
+                    totalRows = job.totalRows,
+                    insertedRows = job.insertedRows,
+                    skippedRows = job.skippedRows,
+                    errorDescription = job.errorDescription,
+                    startedAt = job.startedAt,
+                    completedAt = job.completedAt,
+                )
+            }
+        }
 
     suspend fun streamJobEvents(jobId: UUID, afterEventId: Long?): Flux<ProgressEvent>? =
         withContext(Dispatchers.IO) {

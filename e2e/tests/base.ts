@@ -2,6 +2,7 @@ import { test as base } from '@playwright/test';
 import { ImportPage } from '../pages/ImportPage';
 import { MapPage, navigateToMapViaUpload } from '../pages/MapPage';
 import { ProgressPage, navigateToProgressViaFullFlow } from '../pages/ProgressPage';
+import { HistoryPage } from '../pages/HistoryPage';
 
 type Pages = {
   importPage: ImportPage;
@@ -9,6 +10,8 @@ type Pages = {
   mapPage: MapPage;
   /** Pre-navigated to /import/progress via the full upload → map → submit flow (requires live backend). */
   progressPage: ProgressPage;
+  /** Pre-navigated to /import?tab=history. */
+  historyPage: HistoryPage;
 };
 
 /**
@@ -30,6 +33,12 @@ export const test = base.extend<Pages>({
   progressPage: async ({ page }, use) => {
     await navigateToProgressViaFullFlow(page);
     await use(new ProgressPage(page));
+  },
+
+  historyPage: async ({ page }, use) => {
+    const historyPage = new HistoryPage(page);
+    await historyPage.gotoHistoryTab();
+    await use(historyPage);
   },
 });
 
