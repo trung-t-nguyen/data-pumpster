@@ -1,5 +1,6 @@
 # UC-XX — [Title]: Implementation Plan
 
+**Version:** v1.0.0
 **Status:** Not started
 **Use Case:** [docs/use-cases/uc-XX-[slug].md](../use-cases/uc-XX-[slug].md)
 

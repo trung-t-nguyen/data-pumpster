@@ -1,5 +1,6 @@
 # UC-03 — Submit an Import Job: Implementation Plan
 
+**Version:** v1.0.0
 **Status:** Complete — [PR #3](https://github.com/trung-t-nguyen/data-pumpster/pull/3)
 **Use Case:** [docs/use-cases/uc-03-submit-import.md](../use-cases/uc-03-submit-import.md)
 

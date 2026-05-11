@@ -160,6 +160,7 @@ npm run lint
 3. **CSS**: Inline Tailwind classes; avoid separate CSS files except for global styles
 4. **Next.js Metadata**: Define using `Metadata` export in layout files
 5. **Database**: Use `compose.yaml` to spin up PostgreSQL for development
+6. **Doc versioning**: Every file under `docs/` carries a `**Version:** vX.Y.Z` field (semver). Bump the version whenever you update a doc: patch (0.0.x) for typos/clarifications, minor (0.x.0) for additions/restructuring, major (x.0.0) for scope or breaking changes.
 
 ## Development Workflow
 

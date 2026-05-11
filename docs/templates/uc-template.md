@@ -1,5 +1,6 @@
 # UC-XX — [Title]
 
+**Version:** v1.0.0
 **Status:** ⬜ Not started
 **Implementation Plan:** [docs/implementation-plan/uc-XX-[slug]-implementation-plan.md](../implementation-plan/uc-XX-[slug]-implementation-plan.md)
 **Actor:** [Actor name]

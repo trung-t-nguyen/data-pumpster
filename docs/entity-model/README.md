@@ -1,5 +1,7 @@
 # Entity Model
 
+**Version:** v1.0.0
+
 Two tables support the CSV import pipeline.
 
 ```mermaid

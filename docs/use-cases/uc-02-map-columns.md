@@ -1,5 +1,6 @@
 # UC-02 — Map CSV Columns to Product Schema
 
+**Version:** v1.0.0
 **Status:** ✅ Complete — [PR #2](https://github.com/trung-t-nguyen/data-pumpster/pull/2)
 **Implementation Plan:** [docs/plan/uc-02-map-columns.md](../plan/uc-02-map-columns.md)
 **Actor:** Data Operator

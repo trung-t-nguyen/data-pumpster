@@ -1,5 +1,7 @@
 # Data Pumpster — Requirement Catalog
 
+**Version:** v1.0.0
+
 ## Overview
 
 High-performance CSV → PostgreSQL import pipeline for the `products` table.

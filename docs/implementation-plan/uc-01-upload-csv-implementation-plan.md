@@ -1,5 +1,6 @@
 # UC-01 — Upload a Product CSV File: Implementation Plan
 
+**Version:** v1.0.0
 **Status:** Complete — [PR #1](https://github.com/trung-t-nguyen/data-pumpster/pull/1)
 **Use Case:** [docs/use-cases/uc-01-upload-csv.md](../use-cases/uc-01-upload-csv.md)
 

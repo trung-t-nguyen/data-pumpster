@@ -1,5 +1,6 @@
 # UC-05 — Review Import History
 
+**Version:** v1.0.0
 **Status:** ✅ Complete
 **Actor:** Data Operator / Team Lead
 **Goal:** Quickly see which imports have run, how many records each one loaded, and whether any failed — to support auditing and troubleshooting.

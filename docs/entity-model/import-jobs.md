@@ -1,5 +1,7 @@
 # Entity — `import_jobs`
 
+**Version:** v1.0.0
+
 Represents a single CSV import run. Created when the operator submits an import (UC-03), updated in real time during processing (UC-04), and displayed in the history view (UC-05).
 
 ---

@@ -1,5 +1,7 @@
 # Data Pumpster — Architecture
 
+**Version:** v1.0.0
+
 ## Stack
 
 **Next.js 16** (App Router) · **Spring Boot 4 / Kotlin / WebFlux** · **PostgreSQL 16**

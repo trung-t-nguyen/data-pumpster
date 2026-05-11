@@ -1,5 +1,7 @@
 # Entity — `products`
 
+**Version:** v1.0.0
+
 Stores the product catalogue rows loaded by each import job. Rows are bulk-inserted using PostgreSQL's COPY protocol (UC-03). Every row is linked to the `import_jobs` record that created it for traceability.
 
 ---

@@ -1,5 +1,6 @@
 # UC-03 — Submit an Import Job
 
+**Version:** v1.0.0
 **Status:** ✅ Complete — [PR #3](https://github.com/trung-t-nguyen/data-pumpster/pull/3)
 **Implementation Plan:** [docs/plan/uc-03-submit-import.md](../plan/uc-03-submit-import.md)
 **Actor:** Data Operator (initiates) · System (executes)

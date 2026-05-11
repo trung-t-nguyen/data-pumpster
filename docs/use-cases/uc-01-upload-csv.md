@@ -1,5 +1,6 @@
 # UC-01 — Upload a Product CSV File
 
+**Version:** v1.0.0
 **Status:** ✅ Complete — [PR #1](https://github.com/trung-t-nguyen/data-pumpster/pull/1)
 **Implementation Plan:** [docs/plan/uc-01-upload-csv.md](../plan/uc-01-upload-csv.md)
 **Actor:** Data Operator
