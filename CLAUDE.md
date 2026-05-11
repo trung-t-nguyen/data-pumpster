@@ -180,7 +180,7 @@ npm run lint
 - **Architecture**: `docs/architecture/ARCHITECTURE.md` — system architecture (Next.js + Spring Boot + PostgreSQL)
 - **Entity Model**: `docs/entity-model/` — entity definitions for `ImportJob` and `Product`
 - **Use Cases**: `docs/use-cases/` — five use cases covering upload, column mapping, import submission, progress streaming, and import history
-- **Implementation Plans**: `docs/implementation-plan/` — one plan per completed UC; created during the implement-uc workflow
+- **Implementation Plans**: `docs/implementation-plan/` — one plan per completed UC; created during the plan-uc workflow
 - **Templates**: `docs/templates/` — canonical templates for new use-case docs (`uc-template.md`) and implementation plans (`implementation-plan-template.md`)
 
 ## Development Workflow

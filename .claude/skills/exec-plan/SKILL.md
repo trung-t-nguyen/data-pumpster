@@ -1,3 +1,10 @@
+---
+name: exec-plan
+description: Execute the approved implementation plan for the use case specified by the argument (e.g. `uc-01`). Assumes `/plan-uc $ARGUMENTS` has already been run and the plan + API spec are approved.
+argument-hint: "[uc-XX]"
+disable-model-invocation: true
+---
+
 Execute the approved implementation plan for the use case specified by the argument (e.g. `uc-01`). Assumes `/plan-uc $ARGUMENTS` has already been run and the plan + API spec are approved.
 
 Steps:

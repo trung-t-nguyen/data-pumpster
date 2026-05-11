@@ -1,3 +1,10 @@
+---
+name: plan-uc
+description: Plan the use case specified by the argument (e.g. `uc-01`). Produces an approved implementation plan and, if backend endpoints are needed, an approved OpenAPI spec — but writes no production code.
+argument-hint: "[uc-XX]"
+disable-model-invocation: true
+---
+
 Plan the use case specified by the argument (e.g. `uc-01`). Produces an approved implementation plan and, if backend endpoints are needed, an approved OpenAPI spec — but writes no production code.
 
 Steps:
