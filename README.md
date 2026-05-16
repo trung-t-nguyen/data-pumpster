@@ -25,8 +25,12 @@ Prerequisites: Docker, Java 21, Node.js.
 
 ## Claude Code Skills
 
+Skills live in [.claude/skills/](.claude/skills/).
+
 | Skill | Description |
 |---|---|
+| `/create-uc [uc-XX]` | Create a new use case document — interviews the creator and writes `docs/use-cases/uc-XX-[slug].md` from the template (no production code) |
+| `/update-uc [uc-XX]` | Update an existing use case document — interviews about what changed, applies edits, and bumps the version (no production code) |
 | `/plan-uc [uc-XX]` | Plan a use case — produces an approved implementation plan and OpenAPI spec (no production code) |
 | `/exec-plan [uc-XX]` | Execute the approved implementation plan for a use case |
 | `/strike-uc [uc-XX]` | Run the full use case workflow: plan, get approval, then implement |

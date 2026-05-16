@@ -27,14 +27,14 @@ UC-01 is entirely client-side. No data leaves the browser during this step (BR-0
 
 ### E2E Tests (`e2e/`)
 
-| File | Role |
-|------|------|
+| File                             | Role                                                                              |
+| -------------------------------- | --------------------------------------------------------------------------------- |
 | `tests/uc-01-upload-csv.spec.ts` | 8 Playwright test cases covering success scenario and all three alternative flows |
-| `pages/ImportPage.ts` | Page Object Model for the upload page (locators + helper methods) |
-| `tests/base.ts` | Base fixture that pre-navigates to `/import` before each test |
-| `fixtures/valid.csv` | 9-row product CSV (SKU, name, price, etc.) for the happy path |
-| `fixtures/empty.csv` | Zero-byte file for alternative flow C (empty file) |
-| `fixtures/headers-only.csv` | Header row with 0 data rows for the zero-row edge case |
+| `pages/ImportPage.ts`            | Page Object Model for the upload page (locators + helper methods)                 |
+| `tests/base.ts`                  | Base fixture that pre-navigates to `/import` before each test                     |
+| `fixtures/valid.csv`             | 9-row product CSV (SKU, name, price, etc.) for the happy path                     |
+| `fixtures/empty.csv`             | Zero-byte file for alternative flow C (empty file)                                |
+| `fixtures/headers-only.csv`      | Header row with 0 data rows for the zero-row edge case                            |
 
 > No backend changes were needed for UC-01 — file transmission to the server happens in UC-03.
 
